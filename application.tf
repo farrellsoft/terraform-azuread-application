@@ -1,8 +1,9 @@
 resource "azuread_application" "backend_application" {
-  display_name = var.backend_application_name
+  for_each          = var.backend_applications
 
+  display_name = each.key
   dynamic "web" {
-    for_each  = var.web_config
+    for_each  = each.value.web_configs
     content {
       redirect_uris = each.value.redirect_uris
       homepage_url  = each.value.homepage_url
@@ -11,17 +12,19 @@ resource "azuread_application" "backend_application" {
       }
     }
   }
-  /*api {
-    oauth2_permission_scope {
-      id                         = random_uuid.function_private_scope.result
-      value                      = "user_impersonation"
-      admin_consent_description  = "Allow the application to access ${var.prefix}-private on behalf of the signed-in user."
-      admin_consent_display_name = "Access ${var.prefix}-private"
-      user_consent_description   = "Allow the application to access ${var.prefix}-private on your behalf."
-      user_consent_display_name  = "Access ${var.prefix}-private"
+
+  dynamic "api" {
+    for_each  = each.value.api_configs
+    content {
+      id                         = each.value.id
+      value                      = each.value.value
+      admin_consent_description  = each.value.admin_consent_description
+      admin_consent_display_name = each.value.admin_consent_display_name
+      user_consent_description   = each.value.user_consent_description
+      user_consent_display_name  = each.value.user_consent_display_name
     }
   }
-  required_resource_access {
+  /*required_resource_access {
     resource_app_id = "00000003-0000-0000-c000-000000000000" # Microsoft Graph
 
     resource_access {
