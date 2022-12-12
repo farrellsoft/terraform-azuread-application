@@ -1,24 +1,42 @@
 
-variable backend_applications {
-  type        = map(object({
-    web_configs = optional(list(object({
-      redirect_uris   = optional(list(string), [])
-      homepage_url    = optional(string)
-      issue_id_token  = optional(bool, false)
-    })), [])
+variable backend_application_name {
+  type        = string
+  description = "The name of the application registration"
+}
 
-    api_configs = optional(list(object({
-      oauth2_permission_scopes = list(object({
-        id                          = string
-        value                       = string
-        admin_consent_description   = string
-        admin_consent_display_name  = string
-        user_consent_description    = string
-        user_consent_display_name   = string
-      }))
-    })), [])
+variable web_configs {
+  type        = list(object({
+    redirect_uris   = list(string)
+    homepage_url    = string
+    issue_id_token  = optional(bool, false)
   }))
 
-  default = {}
-  description = "The application registrations you wish to create. Key with application name"
+  default = []
+  description = "The web configurations for the application registration"
+}
+
+variable api_configs {
+  type = list(object({
+    value                       = string
+    admin_consent_description   = string
+    admin_consent_display_name  = string
+    user_consent_description    = string
+    user_consent_display_name   = string
+  }))
+
+  default = []
+  description = "The API configurations for the application registration"
+}
+
+variable app_roles {
+  type = list(object({
+    allowed_member_types = list(string)
+    description          = string
+    display_name         = string
+    enabled              = optional(bool, true)
+    role_name            = string
+  }))
+
+  default = []
+  description = "The application roles for the application registration"
 }
