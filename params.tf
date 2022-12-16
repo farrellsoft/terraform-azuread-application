@@ -1,4 +1,5 @@
 
+
 variable backend_application_name {
   type        = string
   description = "The name of the application registration"
@@ -6,9 +7,10 @@ variable backend_application_name {
 
 variable web_configs {
   type        = list(object({
-    redirect_uris   = list(string)
-    homepage_url    = string
-    issue_id_token  = optional(bool, false)
+    redirect_uris       = list(string)
+    homepage_url        = optional(string, null)
+    issue_id_token      = optional(bool, false)
+    issue_access_token  = optional(bool, true)
   }))
 
   default = []
