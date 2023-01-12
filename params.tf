@@ -8,8 +8,7 @@ variable application_roles {
   type        = list(object({
     description = string,
     display_name = string,
-    role_name = string,
-    is_enabled = bool
+    role_name = string
   }))
 
   default     = []
