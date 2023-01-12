@@ -19,7 +19,7 @@ resource azuread_application this {
       description   = app_role.value.description
       display_name  = app_role.value.display_name
       enabled       = true
-      id            = index(var.application_roles, app_role.value)
+      id            = random_uuid.roleids[index(var.application_roles, app_role.value)].result
       value         = app_role.value.role_name
     }
   }
