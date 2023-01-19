@@ -9,6 +9,10 @@ resource azuread_application this {
     "api://${var.application_name}",
   ]
 
+  owners              = [
+    data.azuread_client_config.current.object_id
+  ]
+
   dynamic "app_role" {
     for_each = var.application_roles
     content {
@@ -27,4 +31,8 @@ resource azuread_application this {
 
 resource azuread_service_principal this {
   application_id = azuread_application.this.application_id
+
+  owners              = [
+    data.azuread_client_config.current.object_id
+  ]
 }
